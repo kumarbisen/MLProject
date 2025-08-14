@@ -1,0 +1,5 @@
+1. install all the package by command
+-> pip install -r requirements.txt
+
+
+if your reuseing this make sure create new environment

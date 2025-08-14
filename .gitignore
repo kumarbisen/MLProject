@@ -1,0 +1,23 @@
+
+# Ignore environment files
+.env*
+# Ignore Python virtual environment folder
+venv1/
+# Ignore virtual environments
+env/
+
+.venv/
+ENV/
+.ENV/
+
+# Ignore conda environment directory (if exported)
+*.conda
+*.env
+*.yml
+environment.yml
+
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.pyo
+
