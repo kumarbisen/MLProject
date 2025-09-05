@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+pillow
+numpy
+tensorflow==2.20.0  # Or your version
+python-multipart
