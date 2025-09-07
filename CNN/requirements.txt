@@ -1,4 +1,10 @@
-tensorflow
+
 matplotlib
 numpy
 ipynb
+fastapi
+uvicorn
+pillow
+
+tensorflow==2.20.0  # Or your version
+python-multipart

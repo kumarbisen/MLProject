@@ -1,64 +1,62 @@
 import logging
+from fastapi import FastAPI, File, UploadFile
+from fastapi.responses import JSONResponse
 from google.cloud import storage
 import tensorflow as tf
 import numpy as np
 from PIL import Image
 import os
 
+app = FastAPI()
+
 BUCKET_NAME = "breed-classification-kumarbisen"
 MODEL_FILE = "/tmp/model.h5"
 
-class_names = ['Alambadi', 'Amritmahal', 'Ayrshire', 'Banni']  # Truncate for now
+class_names = [
+    'Alambadi', 'Amritmahal', 'Ayrshire', 'Banni', 'Bargur', 'Bhadawari', 'Brown_Swiss',
+    'Dangi', 'Deoni', 'Gir', 'Guernsey', 'Hallikar', 'Hariana', 'Holstein_Friesian',
+    'Jaffrabadi', 'Jersey', 'Kangayam', 'Kankrej', 'Kasargod', 'Kenkatha', 'Kherigarh',
+    'Khillari', 'Krishna_Valley', 'Malnad_gidda', 'Mehsana', 'Murrah', 'Nagori',
+    'Nagpuri', 'Nili_Ravi', 'Nimari', 'Ongole', 'Pulikulam', 'Rathi', 'Red_Dane',
+    'Red_Sindhi', 'Sahiwal', 'Surti', 'Tharparkar', 'Toda', 'Umblachery', 'Vechur'
+]
 
 model = None
 
-def download_model():
-    logging.info("Downloading model from GCS...")
+
+def download_blob(bucket_name, source_blob_name, destination_file_name):
+    """Downloads a blob from the bucket."""
     storage_client = storage.Client()
-    bucket = storage_client.bucket(BUCKET_NAME)
-    blob = bucket.blob("models/model.h5")
-    blob.download_to_filename(MODEL_FILE)
-    logging.info("Model saved to /tmp/model.h5")
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(source_blob_name)
+    blob.download_to_filename(destination_file_name)
+    logging.info(f"Blob {source_blob_name} downloaded to {destination_file_name}.")
 
-def preprocess_image(file):
-    logging.info("Preprocessing image...")
-    image = Image.open(file).convert("RGB")
-    image = image.resize((256, 256))
-    image = np.array(image) / 255.0
-    image = np.expand_dims(image, axis=0)
-    return image
 
-def predict(request):
+@app.post("/predict")
+async def predict(file: UploadFile = File(...)):
     global model
+    if model is None:
+        # Download model only once
+        download_blob(
+            BUCKET_NAME,
+            "models/model.h5",
+            MODEL_FILE,
+        )
+        model = tf.keras.models.load_model(MODEL_FILE)
 
-    logging.info("Received a request")
+    # Read image
+    image = Image.open(file.file).convert("RGB").resize((256, 256))
+    image = np.array(image)
 
-    try:
-        if "file" not in request.files:
-            logging.error("File missing in request")
-            return {"error": "Missing file"}, 400
+    # Preprocess
+    img_array = tf.expand_dims(image, 0)
+    predictions = model.predict(img_array)
 
-        if not os.path.exists(MODEL_FILE):
-            download_model()
+    predicted_class = class_names[np.argmax(predictions[0])]
+    confidence = float(round(100 * (np.max(predictions[0])), 2))
 
-        if model is None:
-            logging.info("Loading model...")
-            model = tf.keras.models.load_model(MODEL_FILE)
-            logging.info("Model loaded")
-
-        file = request.files["file"]
-        img = preprocess_image(file)
-
-        logging.info("Making prediction...")
-        prediction = model.predict(img)
-        predicted_class = class_names[np.argmax(prediction[0])]
-        confidence = round(float(np.max(prediction[0]) * 100), 2)
-
-        return {
-            "class": predicted_class,
-            "confidence": confidence
-        }
-
-    except Exception as e:
-        logging.exception("Prediction failed due to exception")
-        return {"error": str(e)}, 500
+    return JSONResponse(content={
+        "class": predicted_class,
+        "confidence": confidence
+    })

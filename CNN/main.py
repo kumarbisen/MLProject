@@ -6,6 +6,7 @@ import tensorflow as tf
 from io import BytesIO
 import os
 
+
 app = FastAPI()
 
 CLASS_NAMES = [
@@ -22,8 +23,10 @@ model = None
 def load_model():
     global model
     if model is None:
-        model_path = "model.h5"
+        model_path = r"C:\MLProject\CNN\BovinaBreedPrediction\AnimalModel1\model.h5"
         model = tf.keras.models.load_model(model_path)
+
+       
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
@@ -32,12 +35,12 @@ async def predict(file: UploadFile = File(...)):
         contents = await file.read()
         image = Image.open(BytesIO(contents)).convert("RGB")
         image = image.resize((256, 256))
-        image_array = np.array(image) / 255.0
-        img_batch = tf.expand_dims(image_array, 0)
+        
+        img_batch = tf.expand_dims(image, 0)
 
         predictions = model.predict(img_batch)
         predicted_class = CLASS_NAMES[np.argmax(predictions[0])]
-        confidence = round(100 * np.max(predictions[0]), 2)
+        confidence = float(round(100 * np.max(predictions[0]), 2))
 
         return {"class": predicted_class, "confidence": confidence}
 
