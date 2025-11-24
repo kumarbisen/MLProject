@@ -28,7 +28,7 @@ combined = zip(student,age)
 student.add("adarsh")
 student.remove("vikash")
 
-#tuples are immutable 
+#tuples are immutable,ordered,accept duplicate,immutable 
 # methods in tuples
 1. s.len()
 2. s.max()
