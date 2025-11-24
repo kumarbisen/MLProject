@@ -34,6 +34,7 @@ combined_list= dict(zip(student,age))
 #set does not support indexing
 student.add("adarsh")
 student.remove("vikash")
+#regular set created by {} or set() but frozenset() create for immutable set which can used as key in dictionary 
 
 #tuples are immutable,ordered,accept duplicate,immutable 
 # methods in tuples
