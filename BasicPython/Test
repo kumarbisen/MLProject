@@ -27,3 +27,5 @@ combined = zip(student,age)
 #set does not support indexing
 student.add("adarsh")
 student.remove("vikash")
+
+#tuples are immutable 
