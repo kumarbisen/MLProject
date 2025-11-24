@@ -45,4 +45,5 @@ student.remove("vikash")
 # single element list using tuple
 single_element = (5,) #commma inside parenthesis is mandatory 
 
-
+os.path.exists(file_path)
+line.strip() # remove all newlines in file
