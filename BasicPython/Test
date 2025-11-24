@@ -1,1 +1,4 @@
 # dictionary 
+student={"name"="vivek","age"=21}
+student["age"]=21 #age updated to 21
+
