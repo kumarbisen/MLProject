@@ -1,4 +1,6 @@
 #there are two type of list homogeneous and heterogeneous list 
+#single element in list
+list =[12]
 
 # dictionary 
 student={"name"="vivek","age"=21}
