@@ -16,5 +16,12 @@ here dict = dictionary_name
 4. dict.items()
 5. dict.copy()
 
+zip function-> 
+in python zip function used to combine multiple iterables(list,tuples) to tuples
+
+student=["vivek","vikash","aman"]
+age=[20,25,18]
+combined = zip(student,age)
+
 
 #set does not support indexing
