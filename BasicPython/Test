@@ -46,4 +46,6 @@ student.remove("vikash")
 single_element = (5,) #commma inside parenthesis is mandatory 
 
 os.path.exists(file_path)
+os.path.abspath(file_path)
+os.path.getsize(file_path)
 line.strip() # remove all newlines in file
