@@ -29,3 +29,8 @@ student.add("adarsh")
 student.remove("vikash")
 
 #tuples are immutable 
+# methods in tuples
+1. s.len()
+2. s.max()
+3. s.min()
+
