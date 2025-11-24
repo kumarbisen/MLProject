@@ -21,9 +21,14 @@ here dict = dictionary_name
 zip function-> 
 in python zip function used to combine multiple iterables(list,tuples) to tuples
 
+
 student=["vivek","vikash","aman"]
 age=[20,25,18]
 combined = zip(student,age)
+
+#create dictionary from two list
+combined_list= dict(zip(student,age))
+
 
 
 #set does not support indexing
