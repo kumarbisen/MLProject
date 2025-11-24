@@ -34,3 +34,7 @@ student.remove("vikash")
 2. s.max()
 3. s.min()
 
+# single element list using tuple
+single_element = (5,) #commma inside parenthesis is mandatory 
+
+
