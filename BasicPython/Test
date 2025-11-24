@@ -4,5 +4,5 @@ student["age"]=21 #age updated to 21
 
 #2 methods to get value of dictionary 
 1. dictionary_name[key]
-2. get(key)
+2. dictionary_name.get(key)
 
