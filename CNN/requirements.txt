@@ -4,7 +4,10 @@ numpy
 ipynb
 fastapi
 uvicorn
+scikit-learn
 pillow
 
 tensorflow==2.20.0  # Or your version
 python-multipart
+opencv-python
+tensorflow_hub
