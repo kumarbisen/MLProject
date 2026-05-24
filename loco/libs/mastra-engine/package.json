@@ -1,0 +1,36 @@
+{
+  "name": "@locusfounder/mastra-engine",
+  "version": "1.0.0",
+  "description": "Core Mastra agents, tools, and workflow for LocusFounder",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "studio": "mastra dev",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@ai-sdk/google": "^1.0.0",
+    "ai": "^4.0.0",
+    "@mastra/core": "^0.10.0",
+    "axios": "^1.7.0",
+    "dotenv": "^16.4.5",
+    "slugify": "^1.6.6",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "mastra": "^0.10.0",
+    "tsup": "^8.1.0",
+    "typescript": "^5.4.5"
+  }
+}

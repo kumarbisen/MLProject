@@ -1,0 +1,32 @@
+/* globals.css */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --primary: #6C63FF;
+  --primary-light: #8B83FF;
+  --primary-dark: #4B44CC;
+  --accent: #FF6B35;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --bg: #0a0a14;
+  --bg-card: #13132a;
+  --bg-input: #1a1a38;
+  --border: #2a2a4a;
+  --text: #f0f0ff;
+  --muted: #8888aa;
+  --radius: 14px;
+}
+
+html { font-size: 16px; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+::selection { background: var(--primary); color: #fff; }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }

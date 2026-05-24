@@ -1,0 +1,23 @@
+{
+  "name": "locusfounder",
+  "private": true,
+  "version": "0.0.1",
+  "description": "LocusFounder — Fully-unattended AI storefront builder powered by Mastra",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "scripts": {
+    "dev": "pnpm --filter mastra-engine build && pnpm --filter telegram-bot dev",
+    "build:engine": "pnpm --filter mastra-engine build",
+    "build:all": "pnpm --filter mastra-engine build && pnpm --filter admin-dashboard build",
+    "dev:bot": "pnpm --filter telegram-bot dev",
+    "dev:dashboard": "pnpm --filter admin-dashboard dev",
+    "dev:studio": "pnpm --filter mastra-engine studio",
+    "install:all": "pnpm install"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  },
+  "packageManager": "pnpm@11.1.1+sha512.d1fdf5f73c617b64fa1a56a81c3c8dfe0e966e33a6010aa256b517ae77be21d93e05affc0de1a83b0e4f29d569f68b446ae8f068cd7247c0bb3df0fb4d7bdf9a"
+}
