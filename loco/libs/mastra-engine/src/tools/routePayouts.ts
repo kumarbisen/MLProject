@@ -59,7 +59,7 @@ export const routePayoutsTool = createTool({
     const ownerStripeAccountId =
       process.env.OWNER_STRIPE_ACCOUNT_ID ?? `acct_mock_${ownerTelegramId.slice(-6)}`;
 
-    const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
+    const BASE_URL = process.env["NEXT_PUBLIC_API_URL"] ?? "https://locusfounder-bot-viv.azurewebsites.net";
 
     const payoutConfig: z.infer<typeof PayoutConfigSchema> = {
       ownerStripeAccountId,
@@ -97,7 +97,7 @@ async function createStripeConnectLink(
   accountId: string
 ): Promise<string> {
   const STRIPE_SECRET = process.env.STRIPE_SECRET_KEY;
-  const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
+  const BASE_URL = process.env["NEXT_PUBLIC_API_URL"] ?? "https://locusfounder-bot-viv.azurewebsites.net";
 
   if (STRIPE_SECRET && !accountId.startsWith("acct_mock_")) {
     try {

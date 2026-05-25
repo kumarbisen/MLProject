@@ -6,6 +6,7 @@
  */
 import type { Product } from "../tools/sourceProducts.js";
 import type { Listing } from "../tools/writeListings.js";
+import type { StorefrontPageId, StorefrontPages } from "../storefront/pages.js";
 
 export interface StoreRecord {
   storeId: string;
@@ -13,6 +14,7 @@ export interface StoreRecord {
   slug: string;
   niche: string;
   ownerTelegramId: string;
+  ownerUserId?: string;
   colorPalette: {
     primary: string;
     secondary: string;
@@ -54,8 +56,22 @@ export interface StoreRecord {
 
 class InMemoryStore {
   stores: Map<string, StoreRecord> = new Map();
+  /** @deprecated Use storefrontPages — kept for backward compatibility (home page). */
   storefrontHTML: Map<string, string> = new Map();
-  
+  storefrontPages: Map<string, StorefrontPages> = new Map();
+
+  setStorefrontPages(storeId: string, pages: StorefrontPages): void {
+    this.storefrontPages.set(storeId, pages);
+    this.storefrontHTML.set(storeId, pages.home);
+  }
+
+  getStorefrontPage(
+    storeId: string,
+    page: StorefrontPageId
+  ): string | undefined {
+    return this.storefrontPages.get(storeId)?.[page];
+  }
+
   /** Returns all stores as an array, newest first */
   listStores(): StoreRecord[] {
     return Array.from(this.stores.values()).sort(
@@ -72,6 +88,13 @@ class InMemoryStore {
   findByOwner(telegramId: string): StoreRecord[] {
     return Array.from(this.stores.values()).filter(
       (s) => s.ownerTelegramId === telegramId
+    );
+  }
+
+  /** Find stores linked to a dashboard user */
+  findByUserId(userId: string): StoreRecord[] {
+    return Array.from(this.stores.values()).filter(
+      (s) => s.ownerUserId === userId
     );
   }
 }

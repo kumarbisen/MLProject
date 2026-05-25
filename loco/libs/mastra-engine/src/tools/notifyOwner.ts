@@ -46,7 +46,7 @@ export const notifyOwnerTool = createTool({
       payoutSchedule,
     } = inputData;
 
-    const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
+    const BASE_URL = process.env["NEXT_PUBLIC_API_URL"] ?? "https://locusfounder-bot-viv.azurewebsites.net";
     const ownerShare = 100 - platformFeePercent;
 
     const message = `🎉 *Your Store Is Live!*
@@ -62,7 +62,7 @@ export const notifyOwnerTool = createTool({
 👉 *Connect your Stripe account to start receiving payouts:*
 ${stripeConnectUrl}
 
-🖥️ *Admin Dashboard:* ${BASE_URL}/admin
+🖥️ *Admin Dashboard:* ${process.env["PUBLIC_ADMIN_URL"] ?? "https://locusfounder-admin-viv.azurewebsites.net"}
 📊 *Store ID:* \`${storeId}\`
 
 Everything is running fully unattended. Orders will be processed and shipped automatically via Locus Logistics. You'll receive payout notifications here.

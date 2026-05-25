@@ -16,7 +16,7 @@
  *  /help          — Show all commands
  */
 import TelegramBot from "node-telegram-bot-api";
-import { storefrontBuilderWorkflow, storeDB } from "@locusfounder/mastra-engine";
+import { runStorefrontBuild, storeDB } from "@locusfounder/mastra-engine";
 
 // ── Conversational Session Types ──────────────────────────────────────────────
 
@@ -119,7 +119,7 @@ _Powered by LocusFounder × Mastra × Locus Logistics_`,
 
     const storeList = stores
       .map(
-        (s) =>
+        (s: any) =>
           `• *${s.storeName}* (${s.status})\n  ID: \`${s.storeId}\`\n  Preview: ${process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001"}/stores/${s.slug}/preview`
       )
       .join("\n\n");
@@ -261,7 +261,7 @@ _Powered by LocusFounder × Mastra × Locus Logistics_`,
       if (data === "action_deploy") {
         bot.sendMessage(
           chatId,
-          `✨ *Deployment Authorized!* Starting Mastra storefront workflow...\n\n_Step 1/6: Sourcing AliExpress dropship catalog..._`,
+          `✨ *Deployment Authorized!* Starting Mastra storefront workflow...\n\n_Step 1/6: Sourcing CJ Dropshipping catalog..._`,
           { parse_mode: "Markdown" }
         );
 
@@ -327,7 +327,7 @@ _Powered by LocusFounder × Mastra × Locus Logistics_`,
 
       await bot.sendMessage(
         chatId,
-        `🛍️ *Question 3 of 4:*\nHow many source products should we catalog from AliExpress suppliers?`,
+        `🛍️ *Question 3 of 4:*\nHow many source products should we catalog from CJ Dropshipping suppliers?`,
         {
           parse_mode: "Markdown",
           reply_markup: {
@@ -358,24 +358,29 @@ async function triggerWorkflow(
   payoutSchedule: "daily" | "weekly" | "monthly"
 ): Promise<void> {
   try {
-    const run = storefrontBuilderWorkflow.createRun();
-
-    const result = await run.start({
-      inputData: {
-        nichePrompt,
-        ownerTelegramId,
-        productLimit,
-        platformFeePercent: 10,
-        payoutSchedule,
-      },
+    const result = await runStorefrontBuild({
+      nichePrompt,
+      ownerTelegramId,
+      productLimit,
+      platformFeePercent: 10,
+      payoutSchedule,
     });
 
     const notifyStep = result.steps?.["notify-owner"];
     const notifySent = (notifyStep as any)?.output?.sent;
+    const final =
+      result.status === "success" ? result.result : undefined;
+
     if (!notifySent) {
       const storeStep = result.steps?.["build-storefront"];
-      const storeName = (storeStep as any)?.output?.storeName ?? "Your Store";
-      const previewUrl = (storeStep as any)?.output?.previewUrl ?? "Check dashboard";
+      const storeName =
+        final?.storeName ??
+        (storeStep as any)?.output?.storeName ??
+        "Your Store";
+      const previewUrl =
+        final?.previewUrl ??
+        (storeStep as any)?.output?.previewUrl ??
+        "Check dashboard";
 
       await bot.sendMessage(
         ownerTelegramId,

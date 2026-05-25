@@ -20,6 +20,7 @@ import { integrateLocusCheckoutTool } from "../tools/integrateLocusCheckout.js";
 import { routePayoutsTool } from "../tools/routePayouts.js";
 import { notifyOwnerTool } from "../tools/notifyOwner.js";
 import { storeDB } from "../db/inMemoryStore.js";
+import { resolveStepInput } from "./workflowInput.js";
 
 // ── Trigger Schema ─────────────────────────────────────────────────────────────
 
@@ -63,9 +64,18 @@ const step1SourceProducts = createStep({
     platformFeePercent: z.number(),
     payoutSchedule: z.enum(["daily", "weekly", "monthly"]),
   }),
-  execute: async (ctx) => {
-    const inputData = (ctx as any).context?.inputData ?? (ctx as any).context ?? (ctx as any);
-    const { nichePrompt, ownerTelegramId, productLimit, platformFeePercent, payoutSchedule } = inputData;
+  execute: async ({ inputData, getInitData }) => {
+    const {
+      nichePrompt,
+      ownerTelegramId,
+      productLimit,
+      platformFeePercent,
+      payoutSchedule,
+    } = resolveStepInput<z.infer<typeof TriggerSchema>>({ inputData, getInitData });
+
+    if (!nichePrompt?.trim()) {
+      throw new Error("nichePrompt is required — pass inputData to run.start()");
+    }
 
     console.log(`[Step 1] Sourcing products for niche: "${nichePrompt}"`);
 
@@ -110,9 +120,9 @@ const step2BuildStorefront = createStep({
     platformFeePercent: z.number(),
     payoutSchedule: z.enum(["daily", "weekly", "monthly"]),
   }),
-  execute: async (ctx) => {
-    const inputData = (ctx as any).context?.inputData ?? (ctx as any).context ?? (ctx as any);
-    const { products, nichePrompt, ownerTelegramId, platformFeePercent, payoutSchedule } = inputData;
+  execute: async ({ inputData, getInitData }) => {
+    const { products, nichePrompt, ownerTelegramId, platformFeePercent, payoutSchedule } =
+      resolveStepInput({ inputData, getInitData });
 
     console.log(`[Step 2] Building storefront for "${nichePrompt}"`);
 
@@ -167,11 +177,20 @@ const step3WriteListings = createStep({
     platformFeePercent: z.number(),
     payoutSchedule: z.enum(["daily", "weekly", "monthly"]),
   }),
-  execute: async (ctx) => {
-    const inputData = (ctx as any).context?.inputData ?? (ctx as any).context ?? (ctx as any);
-    const { storeId, storeName, slug, previewUrl, products, nichePrompt, ownerTelegramId, platformFeePercent, payoutSchedule } = inputData;
+  execute: async ({ inputData, getInitData }) => {
+    const {
+      storeId,
+      storeName,
+      slug,
+      previewUrl,
+      products,
+      nichePrompt,
+      ownerTelegramId,
+      platformFeePercent,
+      payoutSchedule,
+    } = resolveStepInput({ inputData, getInitData });
 
-    console.log(`[Step 3] Writing AI listings for ${products.length} products`);
+    console.log(`[Step 3] Writing AI listings for ${products?.length ?? 0} products`);
 
     const result = await writeListingsTool.execute!({
       context: { storeId, products, storeName, niche: nichePrompt },
@@ -218,9 +237,17 @@ const step4IntegrateCheckout = createStep({
     payoutSchedule: z.enum(["daily", "weekly", "monthly"]),
     registered: z.boolean(),
   }),
-  execute: async (ctx) => {
-    const inputData = (ctx as any).context?.inputData ?? (ctx as any).context ?? (ctx as any);
-    const { storeId, storeName, slug, previewUrl, products, ownerTelegramId, platformFeePercent, payoutSchedule } = inputData;
+  execute: async ({ inputData, getInitData }) => {
+    const {
+      storeId,
+      storeName,
+      slug,
+      previewUrl,
+      products,
+      ownerTelegramId,
+      platformFeePercent,
+      payoutSchedule,
+    } = resolveStepInput({ inputData, getInitData });
 
     console.log(`[Step 4] Integrating Locus Checkout for storeId: ${storeId}`);
 
@@ -270,9 +297,17 @@ const step5RoutePayouts = createStep({
     platformFeePercent: z.number(),
     payoutSchedule: z.enum(["daily", "weekly", "monthly"]),
   }),
-  execute: async (ctx) => {
-    const inputData = (ctx as any).context?.inputData ?? (ctx as any).context ?? (ctx as any);
-    const { storeId, storeName, slug, previewUrl, products, ownerTelegramId, platformFeePercent, payoutSchedule } = inputData;
+  execute: async ({ inputData, getInitData }) => {
+    const {
+      storeId,
+      storeName,
+      slug,
+      previewUrl,
+      products,
+      ownerTelegramId,
+      platformFeePercent,
+      payoutSchedule,
+    } = resolveStepInput({ inputData, getInitData });
 
     console.log(`[Step 5] Routing payouts for storeId: ${storeId}`);
 
@@ -318,12 +353,18 @@ const step6NotifyOwner = createStep({
     previewUrl: z.string(),
     productCount: z.number(),
   }),
-  execute: async (ctx) => {
-    const inputData = (ctx as any).context?.inputData ?? (ctx as any).context ?? (ctx as any);
+  execute: async ({ inputData, getInitData }) => {
     const {
-      storeId, storeName, slug, previewUrl, products,
-      ownerTelegramId, platformFeePercent, payoutSchedule, stripeConnectUrl
-    } = inputData;
+      storeId,
+      storeName,
+      slug,
+      previewUrl,
+      products,
+      ownerTelegramId,
+      platformFeePercent,
+      payoutSchedule,
+      stripeConnectUrl,
+    } = resolveStepInput({ inputData, getInitData });
 
     console.log(`[Step 6] Notifying owner ${ownerTelegramId}`);
 

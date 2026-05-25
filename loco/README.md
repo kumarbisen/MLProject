@@ -2,7 +2,7 @@
 
 > **Fully unattended AI storefront builder** — Send a niche prompt, get a complete dropshipping store.
 
-Built on [Mastra](https://mastra.ai) + Gemini AI + Locus Logistics + Stripe Connect.
+Built on [Mastra](https://mastra.ai) + Gemini AI + 17TRACK + Stripe Connect.
 
 ---
 
@@ -19,7 +19,7 @@ LocusFounder autonomously:
 1. **Sources products** — queries dropship supplier APIs for trending items
 2. **Builds a storefront** — generates brand name, colour palette, full HTML/CSS shop
 3. **Writes all listings** — uses Gemini AI to write SEO-optimized titles, descriptions, bullet points & CTAs for every product
-4. **Integrates Locus Checkout** — registers with Locus Logistics, configures webhooks, embeds the checkout widget
+4. **Registers tracking with 17TRACK** — registers shipment numbers for multi-carrier monitoring and receives webhook updates
 5. **Routes payouts** — sets up Stripe Connect split payments (platform fee + owner share)
 6. **Notifies the owner** — sends a Telegram summary with store URL, Stripe onboarding link, and payout details
 
@@ -87,9 +87,10 @@ Required keys:
 |-----|--------|
 | `GOOGLE_GENERATIVE_AI_API_KEY` | [Google AI Studio](https://aistudio.google.com) |
 | `TELEGRAM_BOT_TOKEN` | [@BotFather](https://t.me/botfather) on Telegram |
+| `TRACK17_API_TOKEN` | 17TRACK Access Token |
 | `LOCUS_API_KEY` | [Locus Dashboard](https://locus.sh) |
 | `STRIPE_SECRET_KEY` | [Stripe Dashboard](https://dashboard.stripe.com) |
-| `ALIEXPRESS_APP_KEY` | [AliExpress Open Platform](https://open.aliexpress.com) |
+| `CJ_API_KEY` | CJ Dropshipping API |
 
 ### 4. Build the Engine
 
@@ -166,7 +167,7 @@ Trigger: { nichePrompt, ownerTelegramId }
          │
          ▼
   ┌─────────────────┐
-  │ 1. sourceProducts│  ← AliExpress / CJ Dropshipping API
+  │ 1. sourceProducts│  ← CJ Dropshipping API
   └────────┬────────┘
            ▼
   ┌──────────────────┐
@@ -227,7 +228,7 @@ export const storefrontBuilderWorkflow = createWorkflow({ ... })
 ### Production Checklist
 
 - [ ] Replace `inMemoryStore.ts` with Prisma + PostgreSQL
-- [ ] Implement real AliExpress API calls in `sourceProducts.ts`
+- [ ] Implement real CJ Dropshipping API calls in `sourceProducts.ts`
 - [ ] Enable Stripe webhook signature verification
 - [ ] Add rate limiting and authentication to `/api/build`
 - [ ] Deploy to Railway / Fly.io / AWS ECS

@@ -79,7 +79,8 @@ async function registerWithLocus(
   const LOCUS_API_KEY = process.env.LOCUS_API_KEY;
   const LOCUS_CLIENT_ID = process.env.LOCUS_CLIENT_ID;
   const LOCUS_BASE_URL = process.env.LOCUS_BASE_URL ?? "https://api.locus.sh";
-  const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
+  const BASE_URL = process.env["NEXT_PUBLIC_API_URL"] ?? "https://locusfounder-bot-viv.azurewebsites.net";
+  const sessionUrl = `${BASE_URL}/checkout/${storeId}`;
 
   if (LOCUS_API_KEY && LOCUS_CLIENT_ID) {
     // ── Real Locus API call ────────────────────────────────────────────────

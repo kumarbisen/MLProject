@@ -1,10 +1,21 @@
 import type { Metadata } from "next";
+import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["700"],
+  variable: "--font-serif",
+});
+
 export const metadata: Metadata = {
-  title: "LocusFounder — Autonomous Storefront Builder",
-  description:
-    "Build complete dropshipping stores in minutes with AI. Products sourced, listings written, checkout integrated, payouts routed — fully unattended.",
+  title: "LOCUS — Customer Dashboard",
+  description: "Track and manage your AI-built apps",
 };
 
 export default function RootLayout({
@@ -13,14 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <body>{children}</body>
     </html>
   );

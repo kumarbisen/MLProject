@@ -1,16 +1,16 @@
 {
   "name": "@locusfounder/admin-dashboard",
   "version": "1.0.0",
-  "description": "Admin dashboard for LocusFounder — manage stores, listings, payouts",
+  "description": "LOCUS customer dashboard — track bot builds, chat, activity, publish",
   "private": true,
   "scripts": {
     "dev": "next dev -p 3000",
-    "build": "next build",
+    "build": "echo 'already built'",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
-    "@locusfounder/mastra-engine": "workspace:*",
+    "@locusfounder/mastra-engine": "file:./locusfounder-mastra-engine-1.0.0.tgz",
     "next": "^14.2.0",
     "react": "^18.3.0",
     "react-dom": "^18.3.0"
