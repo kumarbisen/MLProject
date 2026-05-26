@@ -21,3 +21,32 @@ __pycache__/
 *.py[cod]
 *.pyo
 
+# Virtual environments (any folder depth)
+venv/
+.venv/
+**/venv/
+**/.venv/
+
+# Tool caches and test artifacts
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+
+# Coverage and build artifacts
+.coverage
+.coverage.*
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Notebook / editor noise
+.ipynb_checkpoints/
+.vscode/
+
+# OS noise
+.DS_Store
+Thumbs.db
+
