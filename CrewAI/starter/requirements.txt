@@ -2,3 +2,8 @@
 python-dotenv==1.0.1
 crewai==0.130.0
 duckduckgo-search
+langchain_openai
+python-decouple 
+langchain-community
+langchain_ollama
+ddgs
